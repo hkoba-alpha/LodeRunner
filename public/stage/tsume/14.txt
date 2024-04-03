@@ -1,0 +1,9 @@
+X         X
+X       ! X
+X  O#  O# X
+X  O#  O# X
+X  O#~~O#PX
+X  O ~ O #X
+X OOO OOO#X
+X$#O #O O#X
+XXXXXXXXXXX

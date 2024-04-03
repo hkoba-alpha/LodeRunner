@@ -1,0 +1,14 @@
+                !           
+  E ~~ ~        !    E      
+OOOO  #   ~     !   OO#     
+OOOO  # OO ~   E!  ~OO#     
+O$$O  # OO~ OOOOOOO  ~#     
+OOOO  #     OOOOOOO # #OOO  
+      #~~~  OOOOOOO #  O$O  
+    ~     # OOOOOOO #  OOO  
+     OOOO # OO$$$OO #       
+   ~ OOOO # OOOOOOO #       
+OOO~ O$$O #~     ~ ~#       
+O$O  OOOO # ~ P ~ #  OOOO   
+OOO       #  OOO  #  O$$O   
+   OO     #       #  #OOO   

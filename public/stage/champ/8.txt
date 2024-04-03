@@ -1,0 +1,16 @@
+#$#OO#$#XX#$#OO#$#XX#$#OO#$#
+#XX# #OO# #XX# #OO#E#XX# #O#
+##E#XX# #OO#E#XX# #OO# #XX##
+##OO# #XX# #OO# #XX# #OO# ##
+#X# #OO# #XX# #OO# #XX# #OO#
+# #XX# #OO# #XX# #OO# #XX# #
+#OO# #XX# #OO# #XX# #OO#E#X#
+## #OO# #XX# #OO# #XX# #OO##
+##XX# #OO# #XX# #OO# #XX# ##
+#O# #XX# #OO# #XX# #OO# #XX#
+# #OO# #XX# #OO# #XX# #OO# #
+#XX# #OO# #XX# #OO# #XX# #O#
+## #XX# #OO#E#XX# #OO# #XX #
+##OO# #XX# #OO# #XX# #OO# ##
+#X# #OO# #XX# #OO# #XX# #OO#
+#P#XX#$#OO#$#XX#$#OO# #XX#$#

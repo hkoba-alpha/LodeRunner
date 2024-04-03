@@ -1,0 +1,16 @@
+       E       E            
+XX XX  X!  P  !XX  X  XXXXX 
+X X X  X ! # ! X X X  XXX   
+X   X  X  !#!  X  XX  XXXXX 
+OOOOOVOOOXO#OOOOOOOOOO EOO  
+#~         # ~  ~ $~$$O#OOO#
+#  $OOOOO$O#O$#O #O #OO#  O#
+# $$OOOOO$O#OXXXVVO#OVO OOO#
+#$$$OOOOO$O# $    XX $   $ #
+#O$OOOOOO$O#VXXOVOOOOOOXXOO#
+#  XXV$VXXX#X $VVO $OX $XXX#
+OO#XX$$$XXX#O#OOOXOOOOOOOOO#
+O #X$$$$$XX#X$       $   $O#
+O#OOOOOOOOO#XXXXXX OOOOOXXO#
+O# $ $ $ $ # OOOOO#O$     $#
+OOOOOOOOOOOOX OOOO#EO#O!OOOO

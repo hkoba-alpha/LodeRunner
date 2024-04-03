@@ -1,0 +1,16 @@
+ E         ~~          P    
+   #OOOOOOO   OOOOOO#       
+   #OOOOOOO   OOOOOO#~#~ !! 
+   #    OOO   OOO   E # !  !
+#~~#    OOO   OOO     # !  !
+#  #   OOO     OOO    #  !! 
+#  E  OOO       OOO   #     
+#    OOO $$   $$ OOO  # ! ! 
+#    OOO OO   OO OOO  # !!  
+#    OOO         OOO  # ! !!
+#    OOO  OOOOO  OOO  #     
+#    OOO  OOOOO  OOO  #OXOO#
+#     OO   OOO   OOO  O $ O#
+OOOOO#OOO  $O$  OOO~~~O O O#
+O $ O# OOOOOOOOOOO~~~~OO OO#
+O O O#   OO   OO           #

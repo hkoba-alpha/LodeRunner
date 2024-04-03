@@ -1,0 +1,16 @@
+                            
+         !         !        
+    O    !         !   O    
+    OXXVO#OVXXXXVO#OVXXO    
+    O$$VO#OV    VO#OV$$O    
+    OOO X#O OOOO O#X OOO    
+       XX#XX    XX#XX       
+   OXXVX##X      X##XVXXO   
+   O$$VX#OOXVXXVXOO#XV$$O   
+   OOO X#O$$VXXV$$O#X OOO   
+      XX#OOO XX OOO#XX      
+  OXXVX##   XXXX   ##XVXXO  
+  O$$VX#            #XV$$O  
+  OOO X#            #X OOO  
+  EE X##  P       EE##X E   
+OOOO# #OOOOOOOOOOOOOO# #OOOO

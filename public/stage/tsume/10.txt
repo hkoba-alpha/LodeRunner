@@ -1,0 +1,14 @@
+              
+P#OOO#OXXO#OOX
+# OOO#O  O#OOX
+$OOOO#O$ O#OOX
+ OOOO#O $O#OOX
+ OOOO#O$ O#OOX
+ OOOO#O $O#OO 
+XXOOO#O$ O#OO$
+XXOOO#O $O#OO 
+X OOO#O$ O#OO 
+X$OOO#O $O#OO$
+X OOO#O$ O#OO 
+X$OOO#O $O#OO 
+X OOO#O$ O#OO 

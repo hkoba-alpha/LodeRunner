@@ -1,0 +1,16 @@
+#~~~~~~~~~~~~~~~~~~~~~~~~~~#
+#   P                      #
+# OOOOO OOOOO  OOOOO OOOOO #
+# O $ O O $ O  O $ O O $ O #
+# OXOOO OOOOO  OOOOO OXOOO #
+#   O     O      O     O   #
+# OOOXO OOOOO  OOOOO OOOXO #
+# O $ O O $ O  O $ O O $ O #
+# OXOOO OOOOO  OOOOO OXOOO #
+#   O     O      O     O   #
+# OOOXO OOOOO  OOOOO OOOXO #
+# O $ O O $ O  O $ O O $ O #
+# OOOOO OOOOO  OOOOO OOOOO #
+#   O     O      O     O   #
+#E        O      O        E#
+OOOOOOOOOOOOOOOOOOOOOOOOOOOO

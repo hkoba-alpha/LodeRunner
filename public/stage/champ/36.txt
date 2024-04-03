@@ -1,0 +1,16 @@
+  !!!!!!!!!!!!!!!!!!!!!!!!! 
+  !  E      ~~~~~     P   ! 
+  !OOOOOOOOO  #  OOOOOOOOO! 
+  !!#~#~#~# O###O #~#~#~#!! 
+  O~#~#~#~#~O# #O~#~#~#~#~O 
+  O~#$# #$#~O###O~#$# #$#~O 
+   OOOOOOOOO ### OOOOOOOOO  
+             # #            
+             ###     OOO    
+             ###    O~~# $  
+#O ~~~~~$    # #   O $ #OOO 
+#X$ ~~~ O    ###~~ X O #~~  
+#OXO$~ O#OXOXO#O  O    #    
+#  OXOXO#   E # OXOXOXOXO $X
+X#      XO OXO#O#   $   $ OX
+OXOX#$O#      $ #OXOXOXOXOXO

@@ -1,0 +1,16 @@
+####  ######################
+#  $OO  XX $ X#$E XX$  X# $#
+# $OO     XXE$ X#$  XX$  X##
+#$OO      $ XX $ X#$  XX$  #
+#OO      #OO  XX $ X#$  XX$#
+#X $    #VO     XX $ X#$  X#
+# XX $ #OV        XX $ X#$ #
+#$  XO OO          $XX $ XX#
+#X#$  XX $       #OO  XX $ #
+#$ X#$  XX $    #VO     XXP#
+#X$  X#$E XX $ #OV       $O#
+# XX$E X#$  XO OO      $OXX#
+#$  XX $ X#$  XX $    $OX  #
+#X#$  XX$  X#$  XX $ $OX   #
+#E X#   XX   X#   OO OO    #
+####################OOOOOOO#
