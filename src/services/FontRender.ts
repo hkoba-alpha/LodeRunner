@@ -33,6 +33,12 @@ const alphaData = [
     0xf7, 0x128f, 0x39, 0x120f, 0xf9, 0xf1, 0xbd, 0xf6, 0x1209, 0x1e, 0x2470, 0x38, 0x536, 0x2136,
     0x3f, 0xf3, 0x203f, 0x20f3, 0x18d, 0x1201, 0x3e, 0xc30, 0x2836, 0x2d00, 0x1500, 0xc09
 ];
+const etcData = [
+    // コロン
+    0xc000,
+    // ピリオド
+    0x10000
+];
 
 export class FontRender {
     private program: WebGLProgram;
@@ -83,7 +89,32 @@ export class FontRender {
             this.makePolygon([0.4, -0.9], [0.05, -0.05]),
             this.makePolygon([-0.05, 0.05], [-0.4, 0.9]),
             this.makePolygon([0, 0.05], [0, 0.9]),
-            this.makePolygon([0.05, 0.05], [0.4, 0.9])
+            this.makePolygon([0.05, 0.05], [0.4, 0.9]),
+            // コロンやピリオド
+            [
+                0, -0.4, -0.2, 1.0,
+                0, -0.6, -0.1, 1.1,
+                -0.2, -0.4, -0.1, 1.2,
+                0, -0.2, -0.1, 0.8,
+                0.2, -0.4, -0.1, 0.9,
+                0, -0.6, -0.1, 1.1
+            ],
+            [
+                0, 0.4, -0.2, 1.0,
+                0, 0.2, -0.1, 1.1,
+                -0.2, 0.4, -0.1, 1.2,
+                0, 0.6, -0.1, 0.8,
+                0.2, 0.4, -0.1, 0.9,
+                0, 0.2, -0.1, 1.1
+            ],
+            [
+                -0.2, 0.8, -0.2, 1.0,
+                -0.2, 0.6, -0.1, 1.1,
+                -0.4, 0.8, -0.1, 1.2,
+                -0.2, 1, -0.1, 0.8,
+                0, 0.8, -0.1, 0.9,
+                -0.2, 0.6, -0.1, 1.1
+            ]
         ];
         let st = 0;
         this.segmentData = [];
@@ -240,6 +271,10 @@ export class FontRender {
             } else if (ch >= 65 && ch - 65 < alphaData.length) {
                 // 英字
                 flag = alphaData[ch - 65];
+            } else if (ch == ':'.charCodeAt(0)) {
+                flag = etcData[0];
+            } else if (ch == '.'.charCodeAt(0)) {
+                flag = etcData[1];
             }
             if (flag > 0) {
                 for (let j = 0; j < this.segmentData.length; j++) {

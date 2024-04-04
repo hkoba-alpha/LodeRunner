@@ -1,6 +1,6 @@
 import { FontRender, getFontRender } from "./FontRender";
 import { PlayerData, ScreenData, StageData, StagePlayData } from "./MyService";
-import { IPlay, StickData } from "./PlayData";
+import { IPlay, StickData, saveData } from "./PlayData";
 import { Point3D, RenderService } from "./RenderService";
 import { StageSelectPlay } from "./StageSelectPlay";
 
@@ -40,8 +40,10 @@ class ClearPlay extends StageData implements IPlay, StickData {
     private count = 350;
     private playerData: PlayerData;
     private fontRender: FontRender;
+    private clearText: string;
+    private bestScore: boolean = false;
 
-    public constructor(gl: WebGL2RenderingContext, stage: ScreenData) {
+    public constructor(gl: WebGL2RenderingContext, stage: ScreenData, clearTime: number) {
         super(new ScreenData([
             "           #                ",
             "           #",
@@ -67,6 +69,8 @@ class ClearPlay extends StageData implements IPlay, StickData {
         renderer.setStage(this);
         this.playerData = new PlayerData(17, 17, this);
         this.fontRender = getFontRender(gl);
+        this.clearText = "clear time " + saveData.getTimeText(clearTime);
+        saveData.setClearTime(stage.info.name, stage.info.stageNum, clearTime).then(ret => this.bestScore = ret);
     }
     stepFrame(gl: WebGL2RenderingContext, stick: StickData): IPlay {
         this.count--;
@@ -78,8 +82,12 @@ class ClearPlay extends StageData implements IPlay, StickData {
         renderer.draw(gl, this.playerData, []);
         gl.enable(gl.BLEND);
         gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-        this.fontRender.drawFrame(gl, [-0.1, -0.4, 1, 0.3], [0.3, 0.3, 0.9, 0.5]);
+        this.fontRender.drawFrame(gl, [-0.1, -0.4, 1, 0.5], [0.3, 0.3, 0.9, 0.5]);
         this.fontRender.draw(gl, "STAGE CLEAR", [0, -0.3, 0.8, 0.1], [1, 1, 1]);
+        this.fontRender.draw(gl, this.clearText, [0.05, 0, 0.04 * this.clearText.length, 0.07], [0.9, 0.9, 0.6]);
+        if (this.bestScore) {
+            this.fontRender.draw(gl, "BEST TIME", [0.05, -0.15, 0.6, 0.08], [0.9, 0.3, 0.3]);
+        }
         gl.disable(gl.BLEND);
         return this;
     }
@@ -141,7 +149,7 @@ export class StagePlay implements IPlay {
             this.stageData.stepFrame();
             renderer.draw(gl, this.stageData.playerData, this.stageData.enemy);
             if (this.stageData.isClear()) {
-                return new ClearPlay(gl, this.stageData.stage);
+                return new ClearPlay(gl, this.stageData.stage, this.stageData.getPlayTime());
             }
             if (this.stageData.isLost()) {
                 return new LostPlay(this.stageData);
@@ -149,8 +157,7 @@ export class StagePlay implements IPlay {
             if (this.startCount > 0) {
                 this.startCount--;
                 let alpha = 1.0;
-                if (this.startCount < 20)
-                {
+                if (this.startCount < 20) {
                     alpha = this.startCount / 20.0;
                 }
                 gl.enable(gl.BLEND);

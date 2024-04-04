@@ -1,3 +1,58 @@
+import Dexie, { Table } from "dexie";
+
+export interface SaveData {
+    id?: number;
+    name: string;
+    stage: number;
+    time: number;
+}
+
+class StageSaveData extends Dexie {
+    private data: Table<SaveData>;
+
+    public constructor() {
+        super('LodeRunnerData');
+
+        this.version(1).stores({
+            saveData: '++id, [name+stage], time'
+        });
+        this.data = this.table('saveData');
+    }
+
+    public getTimeText(time: number): string {
+        const tm = Math.floor(time * 10 / 6);
+        if (tm >= 6000) {
+            return Math.floor(tm / 6000) + ":" + Math.floor((tm % 6000) / 100).toString().padStart(2, "0") + "." + (tm % 10).toString().padStart(2, "0");
+        } else {
+            return Math.floor(tm / 100) + "." + (tm % 100).toString().padStart(2, "0");
+        }
+    }
+    public async getClearTime(name: string, stage: number): Promise<number> {
+        const dt = await this.data.get({ name: name, stage: stage });
+        if (dt) {
+            return dt.time;
+        }
+        return -1;
+    }
+
+
+    public async setClearTime(name: string, stage: number, time: number): Promise<boolean> {
+        const dt = await this.data.get({ name: name, stage: stage });
+        if (dt) {
+            if (time < dt.time) {
+                // 更新
+                await this.data.update(dt.id, { name: name, stage: stage, time: time });
+                return true;
+            }
+            return false;
+        }
+        await this.data.add({ name: name, stage: stage, time: time });
+        return true;
+    }
+}
+
+export const saveData = new StageSaveData();
+
 export interface StickData {
     isLeft(cancel?: boolean): boolean;
     isRight(cancel?: boolean): boolean;
@@ -43,7 +98,7 @@ export class KeyboardStick implements StickData {
     }
     public processEvent(event: KeyboardEvent): void {
         let flag = 0;
-        switch (event.code) {
+        switch (event.key) {
             case 'ArrowUp':
                 flag = 1 << ButtonType.Up;
                 break;
@@ -56,18 +111,34 @@ export class KeyboardStick implements StickData {
             case 'ArrowRight':
                 flag = 1 << ButtonType.Right;
                 break;
-            case 'KeyZ':
-                flag = 1 << ButtonType.LeftBeam;
-                break;
-            case 'KeyX':
-                flag = 1 << ButtonType.RightBeam;
-                break;
-            case 'Enter':
-                flag = 1 << ButtonType.Pause;
-                break;
-            case 'ShiftLeft':
-                flag = 1 << ButtonType.Select;
-                break;
+        }
+        if (!flag) {
+            switch (event.code) {
+                case 'ArrowUp':
+                    flag = 1 << ButtonType.Up;
+                    break;
+                case 'ArrowDown':
+                    flag = 1 << ButtonType.Down;
+                    break;
+                case 'ArrowLeft':
+                    flag = 1 << ButtonType.Left;
+                    break;
+                case 'ArrowRight':
+                    flag = 1 << ButtonType.Right;
+                    break;
+                case 'KeyZ':
+                    flag = 1 << ButtonType.LeftBeam;
+                    break;
+                case 'KeyX':
+                    flag = 1 << ButtonType.RightBeam;
+                    break;
+                case 'Enter':
+                    flag = 1 << ButtonType.Pause;
+                    break;
+                case 'ShiftLeft':
+                    flag = 1 << ButtonType.Select;
+                    break;
+            }
         }
         if (flag) {
             if (event.type === 'keydown') {

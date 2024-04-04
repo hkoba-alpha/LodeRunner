@@ -1,6 +1,6 @@
 import { FontRender, getFontRender } from "./FontRender";
 import { BlockType, ScreenData, StageData, StagePlayData } from "./MyService";
-import { IPlay, StickData } from "./PlayData";
+import { IPlay, StickData, saveData } from "./PlayData";
 import { StagePlay } from "./StagePlay";
 
 export interface StageProperty {
@@ -243,6 +243,7 @@ let stageRender: StageRender;
 export class StageSelectPlay implements IPlay {
     private mode: "select" | "start" | "clear";
     private fontRender: FontRender;
+    private clearText?: string;
 
     public constructor(gl: WebGL2RenderingContext, mode: "select" | "restart" | "clear" = "select") {
         this.fontRender = getFontRender(gl);
@@ -272,10 +273,16 @@ export class StageSelectPlay implements IPlay {
     private makeStageTexture(gl: WebGL2RenderingContext): void {
         const type = stageTypeList[lastType];
         const data = type.getStageData(type.getStageNum());
+        this.clearText = "";
         if (!stageRender) {
             stageRender = new StageRender(gl);
         }
         stageRender.setStage(gl, data);
+        saveData.getClearTime(type.prop.name, type.getStageNum()).then(res => {
+            if (res > 0) {
+                this.clearText = "CLEAR TIME " + saveData.getTimeText(res);
+            }
+        });
     }
     private close(gl: WebGL2RenderingContext): void {
         /*
@@ -328,9 +335,12 @@ export class StageSelectPlay implements IPlay {
 
                     this.fontRender.drawFrame(gl, [-0.9, -0.2, 1.8, 1], [0.2, 0.3, 0], [0.9, 0.7, 0.2]);
                     const stage = "STAGE " + type.getStageNum();
-                    this.fontRender.draw(gl, stage, [-0.8, -0.1, 0.1 * stage.length, 0.2], [0.9, 0.9, 1]);
+                    this.fontRender.draw(gl, stage, [-0.8, -0.12, 0.1 * stage.length, 0.18], [0.9, 0.9, 1]);
+                    if (this.clearText) {
+                        this.fontRender.draw(gl, this.clearText, [-0.7, 0.7, 0.04 * this.clearText.length, 0.07], [0.9, 0.9, 0.6]);
+                    }
                 }
-                stageRender.draw(gl, 100, 280);
+                stageRender.draw(gl, 100, 270);
                 gl.flush();
                 break;
             case "start":

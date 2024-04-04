@@ -1465,6 +1465,7 @@ export class StagePlayData extends StageData {
     public readonly playerData: PlayerData;
     public readonly enemy: EnemyData[];
     private restGold: number;
+    private playTime: number;
 
     private pausePos: {
         x: number;
@@ -1492,6 +1493,7 @@ export class StagePlayData extends StageData {
             base: 50,
             mode: 1
         };
+        this.playTime = 0;
         this.enemy = [];
         this.playerData = new PlayerData(0, 0, stick);
         let enePos: Point[] = [];
@@ -1569,6 +1571,9 @@ export class StagePlayData extends StageData {
     }
     public isClear(): boolean {
         return this.pausePos.mode === -2;
+    }
+    public getPlayTime(): number {
+        return this.playTime;
     }
 
     public getViewPos(): Point3D {
@@ -1684,6 +1689,7 @@ export class StagePlayData extends StageData {
             console.log("Pause Start");
             return;
         }
+        this.playTime++;        
         this.playerData.moveFrame(this);
         for (let ene of this.enemy) {
             ene.moveFrame(this);
