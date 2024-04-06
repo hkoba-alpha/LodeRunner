@@ -1,5 +1,3 @@
-import { getProjection, getTranslation } from "./RenderCommon";
-
 const v_shader = `
 // xyz, a=色の明るさ
 attribute vec4 a_pos;
@@ -250,7 +248,7 @@ export class FontRender {
     }
 
     public draw(gl: WebGL2RenderingContext, text: string, rect: number[], color: number[]): void {
-        if (color.length == 3) {
+        if (color.length === 3) {
             color = [...color, 1.0];
         }
         let width = rect[2] / text.length;
@@ -271,9 +269,9 @@ export class FontRender {
             } else if (ch >= 65 && ch - 65 < alphaData.length) {
                 // 英字
                 flag = alphaData[ch - 65];
-            } else if (ch == ':'.charCodeAt(0)) {
+            } else if (ch === ':'.charCodeAt(0)) {
                 flag = etcData[0];
-            } else if (ch == '.'.charCodeAt(0)) {
+            } else if (ch === '.'.charCodeAt(0)) {
                 flag = etcData[1];
             }
             if (flag > 0) {
@@ -310,13 +308,13 @@ export class FontRender {
         gl.uniform3f(this.uPos, rect[0], rect[1], 0);
         gl.uniform2f(this.uSize, rect[2], rect[3]);
         if (border) {
-            if (border.length == 3) {
+            if (border.length === 3) {
                 border = [...border, 1.0];
             }
             gl.uniform4fv(this.uColor, border);
             gl.drawArrays(gl.TRIANGLE_STRIP, this.frameData[2], this.frameData[3]);
         }
-        if (bg.length == 3) {
+        if (bg.length === 3) {
             bg = [...bg, 1.0];
         }
         gl.uniform4fv(this.uColor, bg);

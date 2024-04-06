@@ -1,6 +1,6 @@
 import { FontRender, getFontRender } from "./FontRender";
 import { PlayerData, ScreenData, StageData, StagePlayData } from "./MyService";
-import { IPlay, StickData, saveData } from "./PlayData";
+import { ButtonType, IPlay, StickData, saveData } from "./PlayData";
 import { Point3D, RenderService } from "./RenderService";
 import { StageSelectPlay } from "./StageSelectPlay";
 
@@ -123,6 +123,9 @@ class ClearPlay extends StageData implements IPlay, StickData {
     }
     isSelect(cancel?: boolean): boolean {
         return false;
+    }
+    getButtonName(type: ButtonType): string {
+        return "";
     }
 }
 export class StagePlay implements IPlay {

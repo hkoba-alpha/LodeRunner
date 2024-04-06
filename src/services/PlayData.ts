@@ -6,17 +6,25 @@ export interface SaveData {
     stage: number;
     time: number;
 }
+export interface ConfigData {
+    id?: number;
+    name: string;
+    config: string;
+}
 
-class StageSaveData extends Dexie {
+class GameSaveData extends Dexie {
     private data: Table<SaveData>;
+    private config: Table<ConfigData>;
 
     public constructor() {
         super('LodeRunnerData');
 
-        this.version(1).stores({
-            saveData: '++id, [name+stage], time'
+        this.version(2).stores({
+            saveData: '++id, [name+stage], time',
+            configData: '++id, name, config'
         });
         this.data = this.table('saveData');
+        this.config = this.table('configData');
     }
 
     public getTimeText(time: number): string {
@@ -35,7 +43,6 @@ class StageSaveData extends Dexie {
         return -1;
     }
 
-
     public async setClearTime(name: string, stage: number, time: number): Promise<boolean> {
         const dt = await this.data.get({ name: name, stage: stage });
         if (dt) {
@@ -49,9 +56,26 @@ class StageSaveData extends Dexie {
         await this.data.add({ name: name, stage: stage, time: time });
         return true;
     }
+
+    public async setConfig(name: string, config: any): Promise<boolean> {
+        const dt = await this.config.get({ name: name });
+        if (dt) {
+            await this.config.update(dt.id, { name: name, config: JSON.stringify(config) });
+        } else {
+            await this.config.put({ name: name, config: JSON.stringify(config) });
+        }
+        return true;
+    }
+    public async getConfig(name: string): Promise<any> {
+        const dt = await this.config.get({ name: name });
+        if (dt) {
+            return JSON.parse(dt.config);
+        }
+        return null;
+    }
 }
 
-export const saveData = new StageSaveData();
+export const saveData = new GameSaveData();
 
 export interface StickData {
     isLeft(cancel?: boolean): boolean;
@@ -62,6 +86,7 @@ export interface StickData {
     isRightBeam(cancel?: boolean): boolean;
     isPause(cancel?: boolean): boolean;
     isSelect(cancel?: boolean): boolean;
+    getButtonName(type: ButtonType): string;
 }
 
 export interface IPlay {
@@ -71,7 +96,7 @@ export interface IPlay {
 /**
  * ボタンの種類
  */
-enum ButtonType {
+export enum ButtonType {
     Left,
     Right,
     Up,
@@ -82,6 +107,7 @@ enum ButtonType {
     Select
 }
 
+
 /**
  * キーボード
  */
@@ -91,13 +117,36 @@ export class KeyboardStick implements StickData {
      * 押しっぱなし検出
      */
     private keepFlag: number;
+    private keyConfig: { [key: string]: ButtonType; } = {
+        'ArrowUp': ButtonType.Up,
+        'ArrowLeft': ButtonType.Left,
+        'ArrowRight': ButtonType.Right,
+        'ArrowDown': ButtonType.Down,
+        'KeyZ': ButtonType.LeftBeam,
+        'KeyX': ButtonType.RightBeam,
+        'ShiftLeft': ButtonType.Select,
+        'Enter': ButtonType.Pause
+    };
+    private buttonName: { [type: number]: string; } = {};
 
     public constructor() {
         this.keyFlag = 0;
         this.keepFlag = 0;
+        saveData.getConfig('keyConfig').then(res => {
+            if (res) {
+                this.keyConfig = res;
+                this.buttonName = {};
+            }
+        });
     }
-    public processEvent(event: KeyboardEvent): void {
+    public processEvent(event: KeyboardEvent): boolean {
         let flag = 0;
+        if (event.key in this.keyConfig) {
+            flag = 1 << this.keyConfig[event.key];
+        } else if (event.code in this.keyConfig) {
+            flag = 1 << this.keyConfig[event.code];
+        }
+        /*
         switch (event.key) {
             case 'ArrowUp':
                 flag = 1 << ButtonType.Up;
@@ -140,6 +189,7 @@ export class KeyboardStick implements StickData {
                     break;
             }
         }
+        */
         if (flag) {
             if (event.type === 'keydown') {
                 this.keyFlag |= flag;
@@ -147,7 +197,9 @@ export class KeyboardStick implements StickData {
                 this.keyFlag &= ~flag;
                 this.keepFlag &= ~flag;
             }
+            return true;
         }
+        return false;
     }
     private isButtonDown(type: ButtonType, cancel?: boolean): boolean {
         let ret = (this.keyFlag & (1 << type) & ~this.keepFlag) > 0;
@@ -181,5 +233,33 @@ export class KeyboardStick implements StickData {
     isSelect(cancel?: boolean): boolean {
         return this.isButtonDown(ButtonType.Select, cancel);
     }
+    getButtonName(type: ButtonType): string {
+        if (!this.buttonName[type]) {
+            for (let key in this.keyConfig) {
+                if (this.keyConfig[key] === type) {
+                    let text = "";
+                    for (let i = 0; i < key.length; i++) {
+                        const ch = key[i];
+                        const big = ch.toUpperCase();
+                        if (i > 0 && ch === big) {
+                            text += ' ';
+                        }
+                        text += big;
+                    }
+                    this.buttonName[type] = text;
+                    break;
+                }
+            }
+        }
+        return this.buttonName[type];
+    }
 
+    public getKeyConfig(): { [key: string]: ButtonType; } {
+        return Object.assign({}, this.keyConfig);
+    }
+    public setKeyConfig(config: { [key: string]: ButtonType; }): void {
+        this.keyConfig = config;
+        this.buttonName = {};
+        saveData.setConfig("keyConfig", config).then();
+    }
 }

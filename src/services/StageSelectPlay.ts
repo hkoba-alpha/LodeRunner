@@ -1,6 +1,6 @@
 import { FontRender, getFontRender } from "./FontRender";
-import { BlockType, ScreenData, StageData, StagePlayData } from "./MyService";
-import { IPlay, StickData, saveData } from "./PlayData";
+import { BlockType, ScreenData, StagePlayData } from "./MyService";
+import { ButtonType, IPlay, StickData, saveData } from "./PlayData";
 import { StagePlay } from "./StagePlay";
 
 export interface StageProperty {
@@ -331,11 +331,14 @@ export class StageSelectPlay implements IPlay {
                     const type = stageTypeList[lastType];
                     this.fontRender.drawFrame(gl, [-0.9, -0.9, 1.2, 0.4], [0.4, 0.4, 0.4], [0.9, 0.9, 0.9]);
                     this.fontRender.draw(gl, type.prop.name, [-0.8, -0.8, 0.06 * type.prop.name.length, 0.1], [0.9, 0.9, 0.3]);
-                    this.fontRender.draw(gl, "SHIFT LEFT TO SWITCH", [-0.75, -0.65, 0.8, 0.05], [1, 1, 1]);
+                    const label = stick.getButtonName(ButtonType.Select) + " TO SWITCH";
+                    this.fontRender.draw(gl, label, [-0.75, -0.65, label.length * 0.04, 0.05], [1, 1, 1]);
 
                     this.fontRender.drawFrame(gl, [-0.9, -0.2, 1.8, 1], [0.2, 0.3, 0], [0.9, 0.7, 0.2]);
+                    const label2 = stick.getButtonName(ButtonType.Pause) + " TO START";
                     const stage = "STAGE " + type.getStageNum();
                     this.fontRender.draw(gl, stage, [-0.8, -0.12, 0.1 * stage.length, 0.18], [0.9, 0.9, 1]);
+                    this.fontRender.draw(gl, label2, [0.05, 0, label.length * 0.03, 0.05], [1, 1, 1]);
                     if (this.clearText) {
                         this.fontRender.draw(gl, this.clearText, [-0.7, 0.7, 0.04 * this.clearText.length, 0.07], [0.9, 0.9, 0.6]);
                     }

@@ -1528,7 +1528,7 @@ export class StagePlayData extends StageData {
                     if (this.stage.get(x, y) === BlockType.EscapeLadder) {
                         this.buffer.set(x, y, BlockType.Ladder);
                         if (this.current.get(x, y) === BlockType.Empty) {
-                            this.buffer.set(x, y, BlockType.Ladder);
+                            this.current.set(x, y, BlockType.Ladder);
                         }
                     }
                 }
