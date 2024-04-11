@@ -11,7 +11,6 @@ export class TitlePlay implements IPlay {
     }
     stepFrame(gl: WebGL2RenderingContext, stick: StickData): IPlay {
         if (stick.isPause(true)) {
-            console.log("NEXT TITLE");
             return new StageSelectPlay(gl);
         }
         gl.clearColor(0, 0, 0, 1);

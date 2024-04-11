@@ -72,6 +72,9 @@ class ClearPlay extends StageData implements IPlay, StickData {
         this.clearText = "clear time " + saveData.getTimeText(clearTime);
         saveData.setClearTime(stage.info.name, stage.info.stageNum, clearTime).then(ret => this.bestScore = ret);
     }
+    checkButton(): void {
+        throw new Error("Method not implemented.");
+    }
     stepFrame(gl: WebGL2RenderingContext, stick: StickData): IPlay {
         this.count--;
         if (this.count <= 0 || stick.isSelect(true)) {

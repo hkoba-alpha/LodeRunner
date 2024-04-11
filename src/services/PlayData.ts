@@ -11,6 +11,11 @@ export interface ConfigData {
     name: string;
     config: string;
 }
+export interface GamePadConfig {
+    axisX: number;
+    axisY: number;
+    buttons: { [key: number]: number };
+}
 
 class GameSaveData extends Dexie {
     private data: Table<SaveData>;
@@ -87,6 +92,8 @@ export interface StickData {
     isPause(cancel?: boolean): boolean;
     isSelect(cancel?: boolean): boolean;
     getButtonName(type: ButtonType): string;
+
+    checkButton(): void;
 }
 
 export interface IPlay {
@@ -106,6 +113,19 @@ export enum ButtonType {
     Pause,
     Select
 }
+
+const defaultGamePadConfig: { [id: string]: GamePadConfig } = {
+    "default": {
+        axisX: 0,
+        axisY: 1,
+        buttons: [14, 15, 12, 13, 0, 1, 9, 8]
+    },
+    "Wireless Controller (STANDARD GAMEPAD Vendor: 054c Product: 09cc)": {
+        axisX: 0,
+        axisY: 1,
+        buttons: [14, 15, 12, 13, 0, 1, 9, 8]
+    }
+};
 
 
 /**
@@ -201,7 +221,7 @@ export class KeyboardStick implements StickData {
         }
         return false;
     }
-    private isButtonDown(type: ButtonType, cancel?: boolean): boolean {
+    protected isButtonDown(type: ButtonType, cancel?: boolean): boolean {
         let ret = (this.keyFlag & (1 << type) & ~this.keepFlag) > 0;
         if (cancel && ret) {
             this.keepFlag |= (1 << type);
@@ -261,5 +281,100 @@ export class KeyboardStick implements StickData {
         this.keyConfig = config;
         this.buttonName = {};
         saveData.setConfig("keyConfig", config).then();
+    }
+    checkButton(): void {
+    }
+}
+
+export class GamepadStick extends KeyboardStick {
+    private padIndex: number;
+    private lastState: boolean[];
+    private pushed: boolean[];
+    private axis: boolean[];
+    private padConfig: GamePadConfig;
+    private id: string;
+    public pushListener?: (button: number) => void;
+
+    public constructor(gamePad: Gamepad) {
+        super();
+        this.id = gamePad.id;
+        this.axis = [false, false, false, false];
+        this.padIndex = gamePad.index;
+        this.lastState = [];
+        this.pushed = [];
+        for (let i = 0; i < gamePad.buttons.length; i++) {
+            this.lastState.push(false);
+            this.pushed.push(false);
+        }
+        this.padConfig = defaultGamePadConfig[gamePad.id] || defaultGamePadConfig['default'];
+        saveData.getConfig(gamePad.id).then(res => {
+            if (res) {
+                this.padConfig = res;
+            }
+        });
+    }
+
+    protected isButtonDown(type: ButtonType, cancel?: boolean | undefined): boolean {
+        //console.log(this.gamePad.axes);
+        const index = this.padConfig.buttons[type];
+        if (this.pushed[index]) {
+            if (cancel) {
+                this.pushed[index] = false;
+            }
+            return true;
+        }
+        return super.isButtonDown(type, cancel);
+    }
+
+    checkButton(): void {
+        const pad = navigator.getGamepads()[this.padIndex];
+        if (pad) {
+            let tmpaxis = [false, false, false, false];
+            if (this.padConfig.axisX < pad.axes.length) {
+                let val = pad.axes[this.padConfig.axisX];
+                if (val < -0.5) {
+                    tmpaxis[ButtonType.Left] = true;
+                } else if (val > 0.5) {
+                    tmpaxis[ButtonType.Right] = true;
+                }
+            }
+            if (this.padConfig.axisY < pad.axes.length) {
+                let val = pad.axes[this.padConfig.axisY];
+                if (val < -0.5) {
+                    tmpaxis[ButtonType.Up] = true;
+                } else if (val > 0.5) {
+                    tmpaxis[ButtonType.Down] = true;
+                }
+            }
+            for (let i = 0; i < tmpaxis.length; i++) {
+                if (tmpaxis[i] !== this.axis[i]) {
+                    // 変わった
+                    this.axis[i] = tmpaxis[i];
+                    this.pushed[this.padConfig.buttons[i]] = tmpaxis[i];
+                }
+            }
+            for (let i = 0; i < pad.buttons.length; i++) {
+                if (this.lastState[i] !== pad.buttons[i].pressed) {
+                    this.lastState[i] = pad.buttons[i].pressed;
+                    this.pushed[i] = this.lastState[i];
+                    if (this.lastState[i] && this.pushListener) {
+                        this.pushListener(i);
+                    }
+                }
+            }
+        }
+    }
+
+    public getPadConfig(): GamePadConfig {
+        return Object.assign({}, this.padConfig);
+    }
+    public setPadConfig(config: GamePadConfig): void {
+        this.padConfig = config;
+        saveData.setConfig(this.id, config).then();
+    }
+    public resetPad(): void {
+        for (let i = 0; i < this.pushed.length; i++) {
+            this.pushed[i] = false;
+        }
     }
 }

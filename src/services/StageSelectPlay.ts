@@ -294,6 +294,11 @@ export class StageSelectPlay implements IPlay {
     }
     stepFrame(gl: WebGL2RenderingContext, stick: StickData): IPlay {
         if (!stageTypeList) {
+            gl.clearColor(0, 0, 0, 1);
+            gl.clearDepth(1.0);
+            gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+            this.fontRender.draw(gl, "LOADING...", [-0.4, -0.1, 0.8, 0.2], [1.0, 0.5, 0.5]);
+            gl.flush();
             return this;
         }
         switch (this.mode) {
@@ -350,7 +355,6 @@ export class StageSelectPlay implements IPlay {
                 this.close(gl);
                 const type = stageTypeList[lastType];
                 const data = type.getStageData(type.getStageNum());
-                console.log("Select Stage");
                 return new StagePlay(gl, stick, new StagePlayData(data, stick, type.prop.holeCount));
         }
         return this;
