@@ -42,7 +42,7 @@ let padSetMap: { [button: number]: number } = {};
 
 const CanvasComponent: React.FC<CanvasComponentProps> = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [animationFrameId, setAnimationFrameId] = useState<number>();
+  const animationFrameIdRef = useRef<number>();
   const [isOpen, setIsOpen] = useState(false);
   const [keyConfig, setKeyConfig] = useState<string[]>(keyConfigLabels);
   const [keySelect, setKeySelect] = useState(-1);
@@ -191,10 +191,10 @@ const CanvasComponent: React.FC<CanvasComponentProps> = () => {
       stick.checkButton();
       playData = playData.stepFrame(context, stick);
       if (playing) {
-        setAnimationFrameId(requestAnimationFrame(proc));
+        animationFrameIdRef.current = requestAnimationFrame(proc);
       }
     };
-    setAnimationFrameId(requestAnimationFrame(proc));
+    animationFrameIdRef.current = requestAnimationFrame(proc);
     //renderer.setStage(data);
     window.addEventListener("keydown", onKeyEvent, false);
     window.addEventListener("keyup", onKeyEvent, false);
@@ -202,7 +202,7 @@ const CanvasComponent: React.FC<CanvasComponentProps> = () => {
     window.addEventListener("gamepaddisconnected", onGamepadDisconnected);
     return () => {
       if (ignore) {
-        cancelAnimationFrame(animationFrameId!);
+        cancelAnimationFrame(animationFrameIdRef.current!);
         window.removeEventListener("keydown", onKeyEvent);
         window.removeEventListener("keyup", onKeyEvent);
         window.removeEventListener("gamepadconnected", onGamepadConnected);

@@ -84,7 +84,7 @@ async function loadStageType(type: string) {
         height: parseInt(map['stage.height']),
         offset: parseInt(map['stage.offset']),
         max: parseInt(map['stage.max']),
-        holeCount: Math.min(280, Math.round(parseInt(holeCnt[0], 16)) + Math.round(parseInt(holeCnt[1], 16)) * 2),
+        holeCount: Math.min(400, Math.round(parseInt(holeCnt[0], 16)) + Math.round(parseInt(holeCnt[1], 16)) * 2),
         name: map['name']
     };
     return await new StageTypeData(type, prop).loadData();
