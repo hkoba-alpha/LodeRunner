@@ -750,6 +750,12 @@ export class EnemyData extends SpritePosition {
         return super.canMove(play, nx, ny);
     }
     onDead(play: StageData): void {
+        if (this.goldWalk > 0) {
+            // 金塊を消す
+            this.goldWalk = 0;
+            play.huntGold();
+            play.fireCancel("e_" + (this.enemyIndex));
+        }
         // 上のどこかに出す
         let nx = Math.floor(Math.random() * play.WIDTH);
         let ny = 1;
