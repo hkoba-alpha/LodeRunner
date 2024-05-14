@@ -573,8 +573,8 @@ export class EnemyData extends SpritePosition {
      * @returns 
      */
     private checkSameHeight(px: number, current: ScreenData, buffer: ScreenData): number {
-        let x = this.bx;
         let ax = Math.sign(px - this.bx);
+        let x = this.bx + ax;
         while (true) {
             let b0 = buffer.get(x, this.by);
             let b1 = buffer.get(x, this.by + 1);
